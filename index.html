@@ -1,10 +1,155 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Hello World</title>
-    </head>
-    <body>
-        <p>Hello World</p>
-    </body>
+  <head>
+    <title>Order Up</title>
+    <link
+      rel="stylesheet"
+      media="(prefers-color-scheme:light)"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/themes/light.css"
+    />
+    <link
+      rel="stylesheet"
+      media="(prefers-color-scheme:dark)"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/themes/dark.css"
+      onload="document.documentElement.classList.add('sl-theme-dark');"
+    />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/shoelace-autoloader.js"></script>
+  </head>
+  <body>
+    <div class="title">
+      <h1>Order Up</h1>
+    </div>
+
+    <div class="description">
+      <p>Order of people to do presentations within a time limit</p>
+
+      <p>Set participant list via the participants query param as a comma separated list</p>
+
+      <p>Set the timer via the secondsPerParticipant query param as an int</p>
+    </div>
+
+    <div class="people">
+      <sl-card class="card-header">
+        <ul id="peopleList">
+        </ul>
+        <div slot="footer">
+          <sl-button id="shuffle" variant="primary" onclick="handleShuffle()">Shuffle</sl-button>
+        </div>
+      </sl-card>
+    </div>
+
+    <div class="timer">
+      <sl-card class="card-header">
+        <p id="timerDisplay">00:30</p>
+
+        <div slot="footer">
+          <sl-button id="start" variant="primary" onclick="handleStart()">Start</sl-button>
+          <sl-button id="cancel" variant="normal" onclick="handleCancel()" disabled>Cancel</sl-button>
+        </div>
+      </sl-card>
+    </div>
+
+    <div class="footer" style="color: var(--sl-color-neutral-300)">
+      <p>Made with <sl-animation name="heartBeat" duration="99999" play><sl-icon style="font-size: 10px; color: #e25555;" name="suit-heart-fill"></sl-icon></sl-animation> by NonlinearFruit (<a href="https://github.com/NonlinearFruit/order-up">source</a>)</p>
+    </div>
+
+    <style>
+      body {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-rows: 1fr auto auto auto auto 2fr;
+        justify-items: center;
+      }
+      .title {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
+      .description {
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+        width:0;
+        min-width:100%;
+      }
+      .people {
+        grid-column: 2 / 3;
+        grid-row: 4 / 5;
+      }
+      .timer {
+        grid-column: 2 / 3;
+        grid-row: 5 / 6;
+      }
+      .footer {
+        grid-column: 2 / 3;
+        grid-row: 6 / 6;
+      }
+    </style>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const secondsPerParticipant = parseInt(urlParams.get("secondsPerParticipant") ?? "90");
+      const people = (urlParams.get("participants") ?? "Your,Names,Here").split(",");
+      var intervalId = 0;
+      reset();
+
+      function reset() {
+        displayTimeRemaining(secondsPerParticipant);
+        setParticipantList(people);
+      }
+
+      function handleShuffle() {
+        setParticipantList(people);
+      }
+
+      function handleStart() {
+        const start = document.getElementById("start");
+        const cancel = document.getElementById("cancel");
+        start.toggleAttribute("disabled");
+        cancel.toggleAttribute("disabled");
+        startTimer(secondsPerParticipant);
+      }
+
+      function handleCancel() {
+        const start = document.getElementById("start");
+        const cancel = document.getElementById("cancel");
+        start.toggleAttribute("disabled");
+        cancel.toggleAttribute("disabled");
+        clearInterval(intervalId);
+        displayTimeRemaining(secondsPerParticipant);
+      }
+
+      function startTimer(durationInSeconds) {
+        intervalId = setInterval(function () {
+          displayTimeRemaining(--durationInSeconds)
+        }, 1000);
+      }
+
+      function displayTimeRemaining(durationInSeconds) {
+        const duration = Math.abs(durationInSeconds)
+        const display = document.getElementById("timerDisplay");
+        var minutes = parseInt(duration / 60, 10);
+        var seconds = parseInt(duration % 60, 10);
+
+        sign = durationInSeconds < 0 ? "-" : "";
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = sign + minutes + ":" + seconds;
+      }
+
+      function setParticipantList(participants) {
+        var randomParticipantOrder = participants
+          .map(value => ({ value, sort: Math.random() }))
+          .sort((a, b) => a.sort - b.sort)
+          .map(({ value }) => value);
+        var list = document.getElementById("peopleList");
+        list.innerHTML = "";
+
+        for (var i = 0; i < randomParticipantOrder.length; i++) {
+          var person = document.createElement('li');
+          person.appendChild(document.createTextNode(randomParticipantOrder[i]));
+          list.appendChild(person);
+        }
+      }
+    </script>
+  </body>
 </html>
 

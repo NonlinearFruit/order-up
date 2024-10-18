@@ -16,9 +16,7 @@
     <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/shoelace-autoloader.js"></script>
   </head>
   <body>
-    <div class="title">
-      <h1>Order Up</h1>
-    </div>
+    <h1 class="title">Order Up</h1>
 
     <div class="description">
       <p>Order of people to do presentations within a time limit. Query parameters:</p>
@@ -28,37 +26,30 @@
       <p><code>secondsPerParticipant</code>: int</p>
     </div>
 
-    <div class="people">
-      <sl-card class="card-header">
-        <div slot="header">
-          Participants
-        </div>
-        <ul id="peopleList">
-        </ul>
-        <div slot="footer">
-          <sl-button id="shuffle" variant="primary" onclick="handleShuffle()">Shuffle</sl-button>
-        </div>
-      </sl-card>
-    </div>
+    <sl-card class="people card-header">
+      <div slot="header">
+        Participants
+      </div>
+      <ul id="peopleList">
+      </ul>
+      <sl-button id="shuffle" variant="primary" slot="footer" onclick="handleShuffle()">Shuffle</sl-button>
+    </sl-card>
 
-    <div class="timer">
-      <sl-card class="card-header">
-        <div slot="header">
-          Timer
-        </div>
-        <p id="timerDisplay">00:30</p>
+    <sl-card class="timer card-header">
+      <div slot="header">
+        Timer
+      </div>
 
-        <sl-progress-bar id="timerProgress" value="0"></sl-progress-bar>
-        <div slot="footer">
-          <sl-button id="start" variant="primary" onclick="handleStart()">Start</sl-button>
-          <sl-button id="cancel" variant="normal" onclick="handleCancel()" disabled>Cancel</sl-button>
-        </div>
-      </sl-card>
-    </div>
+      <p id="timerDisplay">00:30</p>
+      <sl-progress-bar id="timerProgress" value="0"></sl-progress-bar>
 
-    <div class="footer">
-      <p>Made with <sl-animation name="heartBeat" duration="99999" play><sl-icon style="font-size: 10px; color: #e25555;" name="suit-heart-fill"></sl-icon></sl-animation> by NonlinearFruit (<a href="https://github.com/NonlinearFruit/order-up">source</a>)</p>
-    </div>
+      <div slot="footer">
+        <sl-button id="start" variant="primary" onclick="handleStart()">Start</sl-button>
+        <sl-button id="cancel" variant="normal" onclick="handleCancel()" disabled>Cancel</sl-button>
+      </div>
+    </sl-card>
+
+    <p class="footer">Made with <sl-animation name="heartBeat" duration="99999" play><sl-icon style="font-size: 10px; color: #e25555;" name="suit-heart-fill"></sl-icon></sl-animation> by NonlinearFruit (<a href="https://github.com/NonlinearFruit/order-up">source</a>)</p>
 
     <style>
       body {

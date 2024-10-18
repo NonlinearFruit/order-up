@@ -143,8 +143,7 @@
           .sort((a, b) => a.sort - b.sort)
           .map(({ name }) => name)
           .map(name => document.createTextNode(name))
-          .map(text => { var participant = document.createElement('li'); participant.appendChild(text); return participant; })
-          .forEach(participant => list.appendChild(participant));
+          .forEach(text => list.appendChild(document.createElement('li')).appendChild(text));
       }
     </script>
   </body>

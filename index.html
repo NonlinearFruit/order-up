@@ -21,15 +21,18 @@
     </div>
 
     <div class="description">
-      <p>Order of people to do presentations within a time limit</p>
+      <p>Order of people to do presentations within a time limit. Query parameters:</p>
 
-      <p>Set participant list via the participants query param as a comma separated list</p>
+      <p><code>participants</code>: comma-separated list</p>
 
-      <p>Set the timer via the secondsPerParticipant query param as an int</p>
+      <p><code>secondsPerParticipant</code>: int</p>
     </div>
 
     <div class="people">
       <sl-card class="card-header">
+        <div slot="header">
+          Participants
+        </div>
         <ul id="peopleList">
         </ul>
         <div slot="footer">
@@ -40,8 +43,12 @@
 
     <div class="timer">
       <sl-card class="card-header">
+        <div slot="header">
+          Timer
+        </div>
         <p id="timerDisplay">00:30</p>
 
+        <sl-progress-bar id="timerProgress" value="0"></sl-progress-bar>
         <div slot="footer">
           <sl-button id="start" variant="primary" onclick="handleStart()">Start</sl-button>
           <sl-button id="cancel" variant="normal" onclick="handleCancel()" disabled>Cancel</sl-button>
@@ -49,7 +56,7 @@
       </sl-card>
     </div>
 
-    <div class="footer" style="color: var(--sl-color-neutral-300)">
+    <div class="footer">
       <p>Made with <sl-animation name="heartBeat" duration="99999" play><sl-icon style="font-size: 10px; color: #e25555;" name="suit-heart-fill"></sl-icon></sl-animation> by NonlinearFruit (<a href="https://github.com/NonlinearFruit/order-up">source</a>)</p>
     </div>
 
@@ -81,6 +88,7 @@
       .footer {
         grid-column: 2 / 3;
         grid-row: 6 / 6;
+        color: var(--sl-color-neutral-300);
       }
     </style>
     <script>
@@ -125,6 +133,7 @@
       function displayTimeRemaining(durationInSeconds) {
         const duration = Math.abs(durationInSeconds)
         const display = document.getElementById("timerDisplay");
+        const progress = document.getElementById("timerProgress");
         var minutes = parseInt(duration / 60, 10);
         var seconds = parseInt(duration % 60, 10);
 
@@ -133,6 +142,7 @@
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
         display.textContent = sign + minutes + ":" + seconds;
+        progress.setAttribute("value", durationInSeconds / secondsPerParticipant * 100);
       }
 
       function setParticipantList(participants) {

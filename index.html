@@ -73,6 +73,13 @@
         grid-column: 2 / 3;
         grid-row: 4 / 5;
       }
+      li {
+        cursor: pointer;
+      }
+      li.ignore {
+        text-decoration: line-through;
+        color: var(--sl-color-neutral-500);
+      }
       .timer {
         grid-column: 3 / 4;
         grid-row: 4 / 5;
@@ -143,7 +150,12 @@
           .sort((a, b) => a.sort - b.sort)
           .map(({ name }) => name)
           .map(name => document.createTextNode(name))
-          .forEach(text => list.appendChild(document.createElement('li')).appendChild(text));
+          .forEach(text => {
+            const li = document.createElement("li");
+            li.appendChild(text);
+            li.onclick = () => li.classList.toggle("ignore");
+            list.appendChild(li);
+          });
       }
     </script>
   </body>
